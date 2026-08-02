@@ -23,8 +23,6 @@ type LogEntry = {
   detail: string;
 };
 
-const storageKey = "keba-test-client-settings";
-
 const defaultSettings: Settings = {
   host: "192.168.147.169",
   port: "8443",
@@ -36,7 +34,7 @@ const defaultSettings: Settings = {
 };
 
 const state = {
-  settings: loadSettings(),
+  settings: { ...defaultSettings },
   tokens: {
     accessToken: "",
     refreshToken: "",
@@ -56,23 +54,6 @@ if (!app) {
 }
 
 render();
-
-function loadSettings(): Settings {
-  const raw = localStorage.getItem(storageKey);
-  if (!raw) {
-    return { ...defaultSettings };
-  }
-
-  try {
-    return { ...defaultSettings, ...(JSON.parse(raw) as Partial<Settings>) };
-  } catch {
-    return { ...defaultSettings };
-  }
-}
-
-function saveSettings(): void {
-  localStorage.setItem(storageKey, JSON.stringify(state.settings));
-}
 
 function render(): void {
   app.innerHTML = `
@@ -212,7 +193,6 @@ function bindInputs(): void {
     element?.addEventListener("input", (event) => {
       const target = event.currentTarget as HTMLInputElement;
       state.settings[field] = target.value;
-      saveSettings();
       render();
     });
   }
@@ -220,7 +200,6 @@ function bindInputs(): void {
   const verifySsl = document.querySelector<HTMLInputElement>("#verifySsl");
   verifySsl?.addEventListener("change", (event) => {
     state.settings.verifySsl = (event.currentTarget as HTMLInputElement).checked;
-    saveSettings();
     render();
   });
 }
@@ -328,7 +307,6 @@ async function getSerial(): Promise<void> {
   state.latestSerial = typeof response === "string" ? response : JSON.stringify(response);
   if (!state.settings.selectedSerial && typeof response === "string") {
     state.settings.selectedSerial = response;
-    saveSettings();
   }
   pushLog("Serial number", response);
 }
@@ -341,7 +319,6 @@ async function getWallboxes(): Promise<void> {
     const first = state.latestWallboxes[0] as { serialNumber?: string };
     if (first.serialNumber) {
       state.settings.selectedSerial = first.serialNumber;
-      saveSettings();
     }
   }
 
