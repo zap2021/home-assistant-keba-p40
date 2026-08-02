@@ -10,5 +10,5 @@
   "issue_tracker": "https://github.com/zap2021/home-assistant-keba-p40/issues",
   "loggers": ["custom_components.keba_p40"],
   "requirements": [],
-  "version": "0.1.0"
+  "version": "1.0.0"
 }
