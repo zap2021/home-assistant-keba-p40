@@ -2,8 +2,8 @@
   "config": {
     "step": {
       "user": {
-        "title": "KEBA Wallbox verbinden",
-        "description": "Richte die Verbindung zu deiner KEBA-Wallbox ein.",
+        "title": "Keba P40 verbinden",
+        "description": "Speichere die Verbindungsdaten. Die Verbindung wird danach beim Einrichten geprüft.",
         "data": {
           "name": "Name",
           "host": "Host",
@@ -37,6 +37,9 @@
       },
       "temperature": {
         "name": "Temperatur"
+      },
+      "current_rfid_card": {
+        "name": "Aktuelle RFID-Karte"
       }
     },
     "binary_sensor": {
@@ -59,6 +62,11 @@
       },
       "permanent_lock": {
         "name": "Dauersperre"
+      }
+    },
+    "number": {
+      "max_available_current": {
+        "name": "Maximal verfügbarer Strom"
       }
     }
   }

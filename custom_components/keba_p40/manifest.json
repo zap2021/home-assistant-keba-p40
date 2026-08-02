@@ -1,12 +1,12 @@
 {
-  "domain": "keba",
-  "name": "KEBA Wallbox",
+  "domain": "keba_p40",
+  "name": "Keba P40",
   "codeowners": [],
   "config_flow": true,
   "dependencies": [],
   "integration_type": "hub",
   "iot_class": "local_polling",
-  "loggers": ["custom_components.keba"],
+  "loggers": ["custom_components.keba_p40"],
   "requirements": [],
-  "version": "0.1.0"
+  "version": "1.0.0-beta"
 }

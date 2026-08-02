@@ -23,6 +23,8 @@ type LogEntry = {
   detail: string;
 };
 
+const LOGIN_PATH = "/v2/jwt/login";
+
 const defaultSettings: Settings = {
   host: "192.168.147.169",
   port: "8443",
@@ -250,19 +252,19 @@ async function handleAction(action: string): Promise<void> {
         await startCharging();
         break;
       case "stopCharging":
-        await callWallboxAction("POST", wallboxPath("/stopCharging"), undefined, "Stop charging");
+        await callWallboxAction("POST", wallboxPath("/stop-charging"), undefined, "Stop charging");
         break;
       case "availabilityOn":
-        await callWallboxAction("POST", wallboxPath("/changeAvailability"), { available: true }, "Availability on");
+        await callWallboxAction("POST", wallboxPath("/change-availability"), { available: true }, "Availability on");
         break;
       case "availabilityOff":
-        await callWallboxAction("POST", wallboxPath("/changeAvailability"), { available: false }, "Availability off");
+        await callWallboxAction("POST", wallboxPath("/change-availability"), { available: false }, "Availability off");
         break;
       case "lockOn":
-        await callWallboxAction("POST", wallboxPath("/permanentlyLock"), {}, "Permanent lock on");
+        await callWallboxAction("POST", wallboxPath("/permanently-lock"), {}, "Permanent lock on");
         break;
       case "lockOff":
-        await callWallboxAction("DELETE", wallboxPath("/permanentlyLock"), undefined, "Permanent lock off");
+        await callWallboxAction("DELETE", wallboxPath("/permanently-lock"), undefined, "Permanent lock off");
         break;
       default:
         throw new Error(`Unknown action: ${action}`);
@@ -276,7 +278,15 @@ async function handleAction(action: string): Promise<void> {
 }
 
 async function login(): Promise<void> {
-  const response = await apiRequest<{ accessToken?: string; refreshToken?: string }>("POST", "/v2/jwt/login", {
+  if (!state.settings.username.trim()) {
+    throw new Error("Benutzername fehlt.");
+  }
+
+  if (!state.settings.password) {
+    throw new Error("Passwort fehlt.");
+  }
+
+  const response = await apiRequest<{ accessToken?: string; refreshToken?: string }>("POST", LOGIN_PATH, {
     username: state.settings.username,
     password: state.settings.password,
   });
@@ -333,8 +343,8 @@ async function getWallbox(): Promise<void> {
 
 async function startCharging(): Promise<void> {
   const suffix = state.settings.startTokenId
-    ? `/startCharging?id=${encodeURIComponent(state.settings.startTokenId)}`
-    : "/startCharging";
+    ? `/start-charging?id=${encodeURIComponent(state.settings.startTokenId)}`
+    : "/start-charging";
   await callWallboxAction("POST", wallboxPath(suffix), undefined, "Start charging");
 }
 
@@ -384,10 +394,32 @@ async function apiRequest<T>(
   const parsed = tryParseJson(text);
 
   if (!response.ok) {
-    throw new Error(`[${response.status}] ${typeof parsed === "string" ? parsed : JSON.stringify(parsed, null, 2)}`);
+    throw new Error(formatApiError(response.status, response.statusText, parsed, path));
   }
 
   return parsed as T;
+}
+
+function formatApiError(status: number, statusText: string, parsed: unknown, path: string): string {
+  if (path === LOGIN_PATH && status >= 500 && isEmptyResponse(parsed)) {
+    return `[${status}] Login fehlgeschlagen. Die KEBA REST API liefert bei Login-Fehlern teilweise HTTP 500 ohne Fehlertext. Bitte Benutzername und Passwort prüfen.`;
+  }
+
+  const detail = formatErrorDetail(parsed);
+  const statusLabel = statusText ? `${status} ${statusText}` : String(status);
+  return detail ? `[${statusLabel}] ${detail}` : `[${statusLabel}] Leere Antwort`;
+}
+
+function formatErrorDetail(parsed: unknown): string {
+  if (typeof parsed === "string") {
+    return parsed.trim();
+  }
+
+  return JSON.stringify(parsed, null, 2);
+}
+
+function isEmptyResponse(parsed: unknown): boolean {
+  return typeof parsed === "string" && parsed.trim().length === 0;
 }
 
 function wallboxPath(suffix = ""): string {

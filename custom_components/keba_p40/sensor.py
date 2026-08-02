@@ -21,6 +21,7 @@ class KebaSensorDescription(SensorEntityDescription):
     """Describe a KEBA sensor."""
 
     value_key: str
+    attributes_key: str | None = None
 
 
 SENSORS: tuple[KebaSensorDescription, ...] = (
@@ -60,6 +61,13 @@ SENSORS: tuple[KebaSensorDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         value_key="temperature",
     ),
+    KebaSensorDescription(
+        key="current_rfid_card",
+        translation_key="current_rfid_card",
+        name="Current RFID Card",
+        value_key="current_rfid_card",
+        attributes_key="current_rfid_card_attributes",
+    ),
 )
 
 
@@ -92,3 +100,12 @@ class KebaSensor(KebaEntity, SensorEntity):
     def native_value(self) -> Any:
         """Return the current sensor value."""
         return self.coordinator.data.get(self.entity_description.value_key)
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any] | None:
+        """Return additional sensor attributes."""
+        if not self.entity_description.attributes_key:
+            return None
+
+        attributes = self.coordinator.data.get(self.entity_description.attributes_key)
+        return attributes if isinstance(attributes, dict) else None

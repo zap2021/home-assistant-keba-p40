@@ -21,7 +21,7 @@ class KebaEntity(CoordinatorEntity[KebaDataUpdateCoordinator]):
         wallbox = self.coordinator.data.get("wallbox", {})
 
         return DeviceInfo(
-            identifiers={(DOMAIN, self.coordinator.serial_number)},
+            identifiers={(DOMAIN, self.coordinator.device_identifier)},
             manufacturer="KEBA",
             model=wallbox.get("model", "Wallbox"),
             model_id=wallbox.get("number"),

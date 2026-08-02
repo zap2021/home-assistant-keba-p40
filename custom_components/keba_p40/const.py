@@ -6,8 +6,8 @@ from datetime import timedelta
 
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME, CONF_VERIFY_SSL
 
-DOMAIN = "keba"
-DEFAULT_NAME = "KEBA Wallbox"
+DOMAIN = "keba_p40"
+DEFAULT_NAME = "Keba P40"
 DEFAULT_HOST = "192.168.0.10"
 DEFAULT_PORT = 8443
 DEFAULT_SCAN_INTERVAL = timedelta(seconds=30)
@@ -21,7 +21,7 @@ ATTR_FIRMWARE = "firmware"
 ATTR_SERIAL = "serial"
 ATTR_API_VERSION = "api_version"
 
-SUPPORTED_PLATFORMS = ("sensor", "binary_sensor", "switch")
+SUPPORTED_PLATFORMS = ("sensor", "binary_sensor", "switch", "number")
 
 API_TIMEOUT = 10
 LOGIN_PATH = "/v2/jwt/login"
@@ -29,6 +29,9 @@ REFRESH_PATH = "/v2/jwt/refresh"
 VERSION_PATH = "/version"
 SERIAL_NUMBER_PATH = "/serialnumber"
 WALLBOXES_PATH = "/v2/wallboxes"
+SESSIONS_PATH = "/v2/sessions"
+RFIDS_PATH = "/v2/rfids"
+LOAD_MANAGEMENT_PATH = "/v2/configs/lmgmt"
 
 CONFIG_ENTRY_DEFAULTS = {
     CONF_USERNAME: DEFAULT_USERNAME,
