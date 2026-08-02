@@ -26,7 +26,7 @@ type LogEntry = {
 const LOGIN_PATH = "/v2/jwt/login";
 
 const defaultSettings: Settings = {
-  host: "192.168.147.169",
+  host: "192.0.2.10",
   port: "8443",
   username: "admin",
   password: "",

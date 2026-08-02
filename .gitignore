@@ -1,0 +1,10 @@
+# Python and Home Assistant development artifacts
+__pycache__/
+*.py[cod]
+
+# macOS Finder metadata
+.DS_Store
+
+# Test-client dependencies and generated assets
+test-client/node_modules/
+test-client/dist/

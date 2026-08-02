@@ -1,71 +1,68 @@
-# Keba P40 Home Assistant Integration
+# KEBA P40 for Home Assistant
 
-Benutzerdefinierte Home-Assistant-Integration fuer eine KEBA-Ladestation ueber die lokale REST-API.
+[![HACS validation](https://github.com/zap2021/home-assistant-keba-p40/actions/workflows/hacs.yaml/badge.svg)](https://github.com/zap2021/home-assistant-keba-p40/actions/workflows/hacs.yaml)
+[![Hassfest](https://github.com/zap2021/home-assistant-keba-p40/actions/workflows/hassfest.yaml/badge.svg)](https://github.com/zap2021/home-assistant-keba-p40/actions/workflows/hassfest.yaml)
 
-## Aktueller Umfang
+> **Status:** Frühphase. Diese benutzerdefinierte Integration ist nicht Teil von Home Assistant Core und wird unabhängig davon entwickelt.
 
-- Einrichtung ueber Config Flow mit `Host`, `Port`, `Benutzername`, `Passwort` und optionaler SSL-Pruefung
-- Authentifizierung ueber `/v2/jwt/login` mit automatischem JWT-Refresh
-- Automatische Erkennung der Wallbox ueber `/serialnumber` und `/v2/wallboxes`
-- Sensoren fuer Ladeleistung, Gesamtenergie, freigegebenen Strom, Temperatur und aktuelle RFID-Karte
-- Binary Sensoren fuer Fahrzeug verbunden, aktive Ladesitzung und Autorisierung aktiv
-- Schalter fuer Laden, Verfuegbarkeit und Dauersperre
-- Number-Entitaet fuer den maximal verfuegbaren Ladestrom ueber die REST-Load-Management-API
-- Lokales Logo/Icon fuer die Integrationskarte in Home Assistant 2026.3 und neuer
+Diese Integration bindet eine KEBA P40-Ladestation über ihre lokale REST-API in Home Assistant ein.
 
-## API-Basis
+## Funktionen
 
-Die Implementierung nutzt die lokale OpenAPI/Swagger-Dokumentation der Wallbox auf Port `8443`, insbesondere:
+- Einrichtung über den Home-Assistant-Config-Flow
+- Lokale JWT-Anmeldung mit automatischer Token-Erneuerung
+- Sensoren für Ladeleistung, Energie, Strom, Temperatur und RFID-Informationen
+- Binary Sensoren für Fahrzeugverbindung, Ladesitzung und Autorisierung
+- Schalter für Laden, Verfügbarkeit und Dauersperre
+- Number-Entität für den maximal verfügbaren Ladestrom
 
-- `/version`
-- `/serialnumber`
-- `/v2/jwt/login`
-- `/v2/jwt/refresh`
-- `/v2/wallboxes`
-- `/v2/wallboxes/{serialNumber}`
-- `/v2/wallboxes/{serialNumber}/start-charging`
-- `/v2/wallboxes/{serialNumber}/stop-charging`
-- `/v2/wallboxes/{serialNumber}/change-availability`
-- `/v2/wallboxes/{serialNumber}/permanently-lock`
-- `/v2/sessions`
-- `/v2/rfids/{id}`
-- `/v2/configs/lmgmt/{prop}`
-- `PUT /v2/configs/lmgmt` mit `max_available_current`
+## Installation über HACS
 
-## Installation
+1. Öffne in Home Assistant **HACS**.
+2. Wähle oben rechts **⋮** → **Benutzerdefinierte Repositories**.
+3. Füge `https://github.com/zap2021/home-assistant-keba-p40` hinzu und wähle als Kategorie **Integration**.
+4. Suche nach **KEBA P40** und installiere die Integration.
+5. Starte Home Assistant neu.
+6. Öffne **Einstellungen** → **Geräte & Dienste** → **Integration hinzufügen** und füge **KEBA P40** hinzu.
+7. Trage Host, Port, Benutzername und Passwort deiner Wallbox ein.
 
-1. Das Verzeichnis `custom_components/keba_p40` nach `<config>/custom_components/keba_p40` kopieren.
-2. Falls vorhanden, den alten Ordner `<config>/custom_components/keba` entfernen, damit die native Integration nicht ersetzt wird.
-3. Home Assistant neu starten.
-4. In Home Assistant die Integration `Keba P40` hinzufuegen.
-5. Die REST-API-Zugangsdaten der Wallbox eintragen.
+HACS installiert die Dateien nach `custom_components/keba_p40`. Zugangsdaten und Laufzeit-Tokens werden nicht im Repository gespeichert.
 
-Die Brand-Assets liegen unter `custom_components/keba_p40/brand/` und werden von Home Assistant 2026.3+ automatisch als Integrations-Icon und -Logo verwendet.
+## Manuelle Installation
 
-## Test Client
+Kopiere `custom_components/keba_p40` nach `<config>/custom_components/keba_p40` und starte Home Assistant neu. Anschließend wird die Integration unter **Einstellungen** → **Geräte & Dienste** hinzugefügt.
 
-Unter [test-client/README.md](/Users/sebastian/GitHub/KebaTest/test-client/README.md) liegt eine getrennte lokale TypeScript-Webanwendung, mit der sich die REST-API der Wallbox vorab testen laesst.
+## Voraussetzungen
 
-## Hinweise
-
-- Standardmaessig ist die SSL-Zertifikatspruefung deaktiviert, da die Wallbox typischerweise ein selbstsigniertes Zertifikat verwendet.
-- Die Integration geht aktuell von genau einer primaeren Wallbox pro Geraet aus.
+- Home Assistant 2026.3.0 oder neuer
+- Zugriff von Home Assistant auf die lokale REST-API der Wallbox (standardmäßig HTTPS auf Port `8443`)
+- REST-API-Zugangsdaten der Wallbox
 
 ## Verbindungsdiagnose
 
-Wenn Home Assistant meldet, dass keine Verbindung zur Box aufgebaut werden kann, zuerst aus der Home-Assistant-Umgebung testen. Ein erfolgreicher `ping` reicht nicht aus, weil er nur ICMP prueft; die Integration braucht TCP und TLS auf Port `8443`.
+Teste die Verbindung aus der Home-Assistant-Umgebung. Ein erfolgreicher `ping` genügt nicht, da die Integration TCP und TLS benötigt:
 
 ```bash
-nc -vz -w 5 192.168.147.169 8443
-curl -vk --connect-timeout 5 https://192.168.147.169:8443/version
+nc -vz -w 5 192.0.2.10 8443
+curl -vk --connect-timeout 5 https://192.0.2.10:8443/version
 ```
 
-Erwartet wird ein erfolgreicher TCP-Verbindungsaufbau und bei `curl` eine Antwort wie `"2.3.0-SNAPSHOT"`. Wenn `ping` funktioniert, diese Befehle im Home-Assistant-Container aber scheitern, blockiert wahrscheinlich Firewall, VLAN-Policy oder Docker-/VM-Netzwerk den TCP-Port `8443`.
+`192.0.2.10` ist ausschließlich ein Dokumentationsbeispiel. Ersetze die Adresse durch den Hostnamen oder die IP-Adresse deiner eigenen Wallbox.
 
-Fuer detaillierte Logs:
+Für detaillierte Logs:
 
 ```yaml
 logger:
   logs:
     custom_components.keba_p40: debug
 ```
+
+## Hinweise
+
+- Die Zertifikatsprüfung ist standardmäßig deaktiviert, weil Wallboxen häufig ein selbstsigniertes TLS-Zertifikat verwenden.
+- Die Integration geht derzeit von einer primären Wallbox pro Gerät aus.
+- Ein separater Browser-basierter API-Testclient befindet sich unter `test-client/`; er gehört nicht zur HACS-Installation.
+
+## Support
+
+Bitte melde Fehler oder Funktionswünsche über die [GitHub Issues](https://github.com/zap2021/home-assistant-keba-p40/issues).
