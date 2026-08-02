@@ -1,0 +1,24 @@
+name: Funktionswunsch
+description: Schlage eine Verbesserung für die Integration vor.
+title: "[Wunsch]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Welches Problem soll gelöst werden?
+      description: Beschreibe den Anwendungsfall.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Vorgeschlagene Lösung
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativen
+      description: Gibt es bereits einen möglichen Workaround?
