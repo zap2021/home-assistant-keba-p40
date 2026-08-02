@@ -1,0 +1,65 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect KEBA wallbox",
+        "description": "Set up the connection to your KEBA wallbox.",
+        "data": {
+          "name": "Name",
+          "host": "Host",
+          "port": "Port",
+          "username": "Username",
+          "password": "Password",
+          "verify_ssl": "Verify SSL certificate",
+          "scan_interval": "Update interval (seconds)"
+        }
+      }
+    },
+    "abort": {
+      "already_configured": "This device is already configured."
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the wallbox.",
+      "invalid_auth": "Authentication with the wallbox failed.",
+      "unknown": "Unexpected error."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "charging_power": {
+        "name": "Charging power"
+      },
+      "energy_total": {
+        "name": "Total energy"
+      },
+      "current_offered": {
+        "name": "Current offered"
+      },
+      "temperature": {
+        "name": "Temperature"
+      }
+    },
+    "binary_sensor": {
+      "vehicle_plugged": {
+        "name": "Vehicle plugged"
+      },
+      "session_active": {
+        "name": "Session active"
+      },
+      "authorization_enabled": {
+        "name": "Authorization enabled"
+      }
+    },
+    "switch": {
+      "charging": {
+        "name": "Charging"
+      },
+      "availability": {
+        "name": "Availability"
+      },
+      "permanent_lock": {
+        "name": "Permanent lock"
+      }
+    }
+  }
+}

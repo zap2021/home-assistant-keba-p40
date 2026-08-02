@@ -1,0 +1,12 @@
+{
+  "domain": "keba",
+  "name": "KEBA Wallbox",
+  "codeowners": [],
+  "config_flow": true,
+  "dependencies": [],
+  "integration_type": "hub",
+  "iot_class": "local_polling",
+  "loggers": ["custom_components.keba"],
+  "requirements": [],
+  "version": "0.1.0"
+}
