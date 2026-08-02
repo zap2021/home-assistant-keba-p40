@@ -5,6 +5,8 @@
 
 > **Status:** Frühphase. Diese benutzerdefinierte Integration ist nicht Teil von Home Assistant Core und wird unabhängig davon entwickelt.
 
+> **Hinweis zu KEBA und Haftung:** Dies ist keine offizielle KEBA-Integration. Der Autor steht in keiner geschäftlichen oder sonstigen Verbindung zu KEBA AG oder ihren verbundenen Unternehmen. Die Nutzung erfolgt auf eigene Verantwortung; es wird keine Haftung für Schäden, Datenverluste, Ausfälle oder Folgeschäden übernommen, soweit dies gesetzlich zulässig ist.
+
 Diese Integration bindet eine KEBA P40-Ladestation über ihre lokale REST-API in Home Assistant ein.
 
 ## Funktionen
