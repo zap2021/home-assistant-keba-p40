@@ -1,4 +1,4 @@
-# KEBA P40 for Home Assistant
+# Inoffizielle Home-Assistant-Integration für KEBA P40
 
 [![HACS validation](https://github.com/zap2021/home-assistant-keba-p40/actions/workflows/hacs.yaml/badge.svg)](https://github.com/zap2021/home-assistant-keba-p40/actions/workflows/hacs.yaml)
 [![Hassfest](https://github.com/zap2021/home-assistant-keba-p40/actions/workflows/hassfest.yaml/badge.svg)](https://github.com/zap2021/home-assistant-keba-p40/actions/workflows/hassfest.yaml)
@@ -7,7 +7,7 @@
 
 > **Hinweis zu KEBA und Haftung:** Dies ist keine offizielle KEBA-Integration. Der Autor steht in keiner geschäftlichen oder sonstigen Verbindung zu KEBA AG oder ihren verbundenen Unternehmen. Die Nutzung erfolgt auf eigene Verantwortung; es wird keine Haftung für Schäden, Datenverluste, Ausfälle oder Folgeschäden übernommen, soweit dies gesetzlich zulässig ist.
 
-Diese Integration bindet eine KEBA P40-Ladestation über ihre lokale REST-API in Home Assistant ein.
+Diese unabhängige Integration dient ausschließlich dazu, KEBA-P40-Ladestationen über ihre lokale REST-API mit Home Assistant zu verwenden. Sie wird weder von KEBA entwickelt, unterstützt noch freigegeben.
 
 ## Funktionen
 
@@ -23,7 +23,7 @@ Diese Integration bindet eine KEBA P40-Ladestation über ihre lokale REST-API in
 1. Öffne in Home Assistant **HACS**.
 2. Wähle oben rechts **⋮** → **Benutzerdefinierte Repositories**.
 3. Füge `https://github.com/zap2021/home-assistant-keba-p40` hinzu und wähle als Kategorie **Integration**.
-4. Suche nach **KEBA P40** und installiere die Integration.
+4. Suche nach **KEBA P40 (inoffiziell)** und installiere die Integration.
 5. Starte Home Assistant neu.
 6. Öffne **Einstellungen** → **Geräte & Dienste** → **Integration hinzufügen** und füge **KEBA P40** hinzu.
 7. Trage Host, Port, Benutzername und Passwort deiner Wallbox ein.
@@ -64,6 +64,14 @@ logger:
 - Die Zertifikatsprüfung ist standardmäßig deaktiviert, weil Wallboxen häufig ein selbstsigniertes TLS-Zertifikat verwenden.
 - Die Integration geht derzeit von einer primären Wallbox pro Gerät aus.
 - Ein separater Browser-basierter API-Testclient befindet sich unter `test-client/`; er gehört nicht zur HACS-Installation.
+
+## Markenhinweis
+
+„KEBA“ und „P40“ werden ausschließlich zur Beschreibung der Kompatibilität mit den jeweiligen Produkten verwendet. Alle Rechte an Namen, Marken und Produktkennzeichen liegen bei den jeweiligen Rechteinhabern. Dieses Projekt verwendet keine Herstellerlogos.
+
+## Sicherheits- und Nutzungshinweis
+
+Die Integration kann Lade- und Verfügbarkeitsfunktionen der Wallbox steuern. Sie ist nicht für sicherheitskritische, lebenswichtige oder anderweitig schadenskritische Anwendungen vorgesehen. Prüfe die Konfiguration und jede Steuerfunktion vor dem produktiven Einsatz und verwende ausschließlich berechtigte REST-API-Zugangsdaten. Stelle außerdem sicher, dass die Nutzung der lokalen API mit deinen Verträgen, den Geräteeinstellungen und den geltenden Sicherheitsvorgaben vereinbar ist.
 
 ## Support
 
